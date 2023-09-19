@@ -8,7 +8,7 @@
   according to a targeted goal, as well as what is the proper gear and clothing to match.
 
 # GROUP MEMBERS
-  *Alyssa Roach 
-  *Alex Reyes 
-  *Jonathan Skeete 
+  * Alyssa Roach 
+  * Alex Reyes 
+  * Jonathan Skeete 
    
