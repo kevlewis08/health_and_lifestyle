@@ -1,0 +1,52 @@
+Choose a CMS or framework to manage content efficiently.
+    Link CMS with github
+    Create Login Page
+    User Authentication
+    Account Creation
+    Set-up Server
+    Set-up Database
+    
+Create Food Diary
+    Daily Calorie Tracker
+    Suggested Recipes
+    Nutrition Info
+    
+Create Landing Page
+    Nav Bar
+    Filler Content
+    Carousel with linked articles
+    
+Create Exercise Journal
+    Excercise Tracker
+    Smiley face rating
+    
+Create Page for Excersices
+    Excersise API?
+    Excercise Search 
+    Links to Excercises
+    
+Create Profile Page
+    User enters height, weight
+    Calculate bmi
+    Profile picture
+    Email address & username
+    
+Create Page for Recipes
+    Recipe API?
+    Recipe Search
+    Links to Recipes
+    
+Create Tips and Articles page
+    Links to articles
+    Links to youtube videos
+    Links to tips 
+    Links to best work out clothing
+    
+Create A Logo
+    Choose color and font of webapp
+    Create relevant logo
+    
+Create Community sharing page / forum
+    Allow Verified users to create threads
+    Allow users to respond and react to threads
+    
