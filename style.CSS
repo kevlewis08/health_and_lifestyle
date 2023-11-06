@@ -24,10 +24,10 @@ body {
     font-size: 17px;
   }
   
-  .topnav a:hover {
+  /*.topnav a:hover {
     background-color: rgb(160, 10, 10);
     color: rgb(255, 255, 255);
-  }
+  }*/
   
   /*.topnav a.active {
     background-color: #ffffff;
@@ -53,9 +53,18 @@ body {
       right: 0;
       top: 0;
     }
+  
     .topnav.responsive a {
       float: none;
       display: block;
       text-align: left;
     }
   }
+  .img-fluid{
+    width: 70px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-top: -6px;
+}
+
