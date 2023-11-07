@@ -1,5 +1,3 @@
-// Description: This file contains the code for the nutrition page.
-  
 const searchInput = document.getElementById('search-input');
 const searchButton = document.getElementById('search-button');
 const searchResults = document.getElementById('search-results');
@@ -19,20 +17,22 @@ searchButton.addEventListener('click', () => {
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            // Process the data and display it in the search-results div.
-            // You can create HTML elements and append them to the searchResults element.
             const conversion = 100 / data.totalWeight;
 
             searchResults.innerHTML = '';
+
             const calories = document.createElement('p');
             calories.innerHTML = `Calories: ${(data.calories * conversion).toFixed(0)}`;
             searchResults.appendChild(calories);
+
             const carbs = document.createElement('p');
             carbs.innerHTML = `Carbs: ${(data.totalNutrients.CHOCDF.quantity * conversion).toFixed(0)}`;
             searchResults.appendChild(carbs);
+
             const fat = document.createElement('p');
             fat.innerHTML = `Fat: ${(data.totalNutrients.FAT.quantity * conversion).toFixed(0)}`;
             searchResults.appendChild(fat);
+            
             const protein = document.createElement('p');
             protein.innerHTML = `Protein: ${(data.totalNutrients.PROCNT.quantity * conversion).toFixed(0)}`;
             searchResults.appendChild(protein);
