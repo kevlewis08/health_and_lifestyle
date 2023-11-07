@@ -10,6 +10,11 @@
 # GROUP MEMBERS
   * Alyssa Roach 
   * Alex Reyes 
+    1. creating the Login page
+    2. creating the Forum page
+    3. choosing a viable CMS
+    creating the Login page to ensure secure access for users and administrators across the website, designing Forum page for interactive discussions so that users may share tips/ accomplishments/ etc. , and selecting a viable Content Management System (CMS) to streamline content management and website maintenance
+
   * Jonathan Skeete
     1. creating the food log
     2. creating the exercise log
