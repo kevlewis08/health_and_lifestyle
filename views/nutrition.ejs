@@ -9,81 +9,84 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/users/dashboard">Health & Fitness</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="/users/dashboard">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/users/fitness">Fitness Log</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="/users/nutrition">Nutrition <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Recipes</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="/users/logout">Logout</a>
-            </li>
-            </ul>
-        </div>
+            <a class="navbar-brand" href="/users/dashboard">Health & Fitness</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/dashboard">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/fitness">Fitness</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/users/nutrition">Nutrition<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/recipes">Recipes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/profile">Profile</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/users/logout">Logout</a>
+                </li>
+                </ul>
+            </div>
         </nav>
         <div class="container">
-        <h1 style="text-align:center">Nutrition Facts</h1>
-        <hr/>
-        <div class="row">
-            <div class="col">
-            <input type="text" id="search-input" placeholder="Enter a food...">
-            <input type="number" id="amount" placeholder="100" style="width: 50px; text-align: right">
-            <span>
-                <select id="unit">
-                <option value="g">g</option>
-                <option value="oz">oz</option>
-                </select>
-            </span>
-            <button id="search-button">Search</button>
+            <h1 style="text-align:center">Nutrition Facts</h1>
+            <hr/>
+            <div class="row">
+                <div class="col">
+                <input type="text" id="search-input" placeholder="Enter a food...">
+                <input type="number" id="amount" placeholder="100" style="width: 50px; text-align: right">
+                <span>
+                    <select id="unit">
+                    <option value="g">g</option>
+                    <option value="oz">oz</option>
+                    </select>
+                </span>
+                <button id="search-button">Search</button>
+                </div>
             </div>
-        </div>
-        <br/>
-        <div class="row">
-            <div class="col">
-            <div id="search-results"></div>
-            <!-- Daily Log Section -->
-            <h1 style="text-align:center">Daily Log</h1>
-            <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Food</th>
-                            <th>Calories</th>
-                            <th>Fat</th>
-                            <th>Carbs</th>
-                            <th>Protein</th>
-                            <th>
-                                <button class="btn btn-light" onclick="addCustomRow()">+</button>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody id="daily-log">
-                        <!-- Daily log entries will be added here dynamically -->
-                    </tbody>
-                    <tfoot>
-                        <tr id="totals-row">
-                        <td>Total</td>
-                        <td id="total-calories">0</td>
-                        <td id="total-fat">0</td>
-                        <td id="total-carbs">0</td>
-                        <td id="total-protein">0</td>
-                        <td></td>
-                        </tr>
-                    </tfoot>
-            </table>
+            <br/>
+            <div class="row">
+                <div class="col">
+                    <div id="search-results"></div>
+                    <!-- Daily Log Section -->
+                    <h1 style="text-align:center">Daily Log</h1>
+                    <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Food</th>
+                                    <th>Calories</th>
+                                    <th>Fat</th>
+                                    <th>Carbs</th>
+                                    <th>Protein</th>
+                                    <th>
+                                        <button class="btn btn-light" onclick="addCustomRow()">+</button>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="daily-log">
+                                <!-- Daily log entries will be added here dynamically -->
+                            </tbody>
+                            <tfoot>
+                                <tr id="totals-row">
+                                <td>Total</td>
+                                <td id="total-calories">0</td>
+                                <td id="total-fat">0</td>
+                                <td id="total-carbs">0</td>
+                                <td id="total-protein">0</td>
+                                <td></td>
+                                </tr>
+                            </tfoot>
+                    </table>
+                </div>
             </div>
-        </div>
         </div>
 
         <script>
@@ -223,10 +226,10 @@
                 const rows = dailyLog.getElementsByTagName('tr');
             
                 for (let i = 0; i < rows.length; i++) {
-                const foodName = rows[i].cells[0].textContent;
-                if (foodName === name) {
-                    return rows[i];
-                }
+                    const foodName = rows[i].cells[0].textContent;
+                    if (foodName === name) {
+                        return rows[i];
+                    }
                 }
             
                 return null;

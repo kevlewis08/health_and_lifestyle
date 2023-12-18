@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Health & Fitness</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/users/dashboard">Health & Fitness</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/dashboard">Home</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/users/fitness">Fitness<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/nutrition">Nutrition</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/recipes">Recipes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/profile">Profile</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/users/logout">Logout</a>
+                </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="container">
+            <h1 style="text-align:center">Fitness Log</h1>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Exercise</th>
+                        <th>Description</th>
+                        <th>
+                            <button class="btn btn-light" onclick="addCustomRow()">+</button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="daily-log">
+                    <!-- Daily log entries will be added here dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <script>
+            function getCurrentDate() {
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const day = String(today.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+              }
+
+            function addExerciseToDatabase(name, description) {
+                const userEmail = '<%=email%>';
+                const userID = '<%=id%>';
+                const currentDate = getCurrentDate();
+            
+                // Send the data to the server using an AJAX request
+                axios.post('/api/exercise_log', {
+                    user_id: userID,
+                    user_email: userEmail.toLowerCase(),
+                    date: currentDate,
+                    exercise_name: name,
+                    description: description
+                })
+                .then(response => {
+                    console.log('Exercise added to the database:', response.data);
+                })
+                .catch(error => {
+                    console.error('Error adding exercise to the database:', error);
+                });
+            }
+
+            async function getExerciseLogForDate() {
+                try {
+                    const response = await axios.get('/api/exercise_log');
+                    const exerciseLogData = response.data;
+                    
+                    exerciseLogData.forEach((entry) => {
+                        const dailyLog = document.getElementById('daily-log');
+                        const existingRow = findExistingRow(entry.exercise_name);
+                        if (existingRow) {
+                            // Update the existing row
+                            existingRow.cells[0].textContent = entry.exercise_name;
+                            existingRow.cells[1].textContent = entry.description;
+                        } else {
+                            // Add a new row
+                            const newRow = document.createElement('tr');
+                            newRow.innerHTML = `
+                            <td>${entry.exercise_name}</td>
+                            <td>${entry.description}</td>
+                            <td><button class="btn btn-light" onclick="deleteExercise(this)">&#8722;</button></td>
+                            `;
+                            
+                            dailyLog.appendChild(newRow);
+                        }
+                    });
+                } catch (error) {
+                    console.error('Error fetching exercise log for the current date:', error);
+                }
+            }
+            
+            getExerciseLogForDate();
+            
+            function deleteExercise(button) {
+                const rowToDelete = button.closest('tr');
+                const name = rowToDelete.cells[0].textContent;
+                console.log('Deleting exercise:', name);
+                
+                // Send a request to delete the exercise entry from the database
+                axios.delete(`/api/exercise_log?email=<%=email%>&name=${name}`)
+                    .then(response => {
+                        console.log('Exercise deleted from the database:', response.data);
+                        // Remove the row from the table if deletion is successful
+                        rowToDelete.remove();
+                    })
+                    .catch(error => {
+                        console.error('Error deleting exercise from the database:', error);
+                    });
+            }
+
+            function findExistingRow(name) {
+                const dailyLog = document.getElementById('daily-log');
+                const rows = dailyLog.getElementsByTagName('tr');
+            
+                for (let i = 0; i < rows.length; i++) {
+                    const exerciseName = rows[i].cells[0].textContent;
+                    if (exerciseName === name) {
+                        return rows[i];
+                    }
+                }
+            
+                return null;
+            }
+
+            function addCustomRow() {
+                const dailyLog = document.getElementById('daily-log');
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td contenteditable="true"></td>
+                    <td contenteditable="true"></td>
+                    <td>
+                        <button class="btn btn-light" onclick="updateDB(this)">&#10003;</button>
+                        <button class="btn btn-light" onclick="deleteExercise(this)">&#8722;</button>
+                    </td>
+                `;
+                dailyLog.appendChild(newRow);
+            }
+
+            function updateDB(button) {
+                const rowToUpdate = button.closest('tr');
+                const name = rowToUpdate.cells[0].textContent;
+                const description = rowToUpdate.cells[1].textContent;
+            
+                addExerciseToDatabase(name, description);
+            }
+            
+        </script>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+</html>

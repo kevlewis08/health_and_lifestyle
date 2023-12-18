@@ -5,6 +5,8 @@ const express = require('express');
 const app = express();
 const loginRoutes = require('./routes/loginRoutes');
 const nutritionRoutes = require('./routes/nutritionRoutes');
+const fitnessRoutes = require('./routes/fitnessRoutes');
+const profileRoutes = require('./routes/profileRoutes');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 const flash = require('express-flash');
@@ -43,6 +45,8 @@ app.get('/', (req, res) => {
 
 app.use('/', nutritionRoutes);
 app.use('/', loginRoutes);
+app.use('/', fitnessRoutes);
+app.use('/', profileRoutes);
 
 
 app.listen(PORT, () => {

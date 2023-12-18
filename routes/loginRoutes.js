@@ -6,6 +6,13 @@ const session = require('express-session');
 const flash = require('express-flash');
 const passport = require('passport');
 
+const initializePassport = require('../passportConfig');
+
+initializePassport(passport);
+
+const { pool } = require('../dbConfig');
+const { parse } = require('dotenv');
+
 router.get('/users/register', checkAuthenticated, (req, res) => {
     res.render("register")
 })
@@ -15,19 +22,23 @@ router.get('/users/login', checkAuthenticated, (req, res) => {
 })
 
 router.get('/users/dashboard', checkNotAuthenticated, (req, res) => {
-    res.render('dashboard', { id: req.user.id, email: req.user.email.toLowerCase(), name: req.user.name })
+    res.render('dashboard', { id: req.user.id, email: req.user.email.toLowerCase(), name: req.user.name, age: req.user.age, height: req.user.height, weight: req.user.weight })
 })
 
 router.get('/users/nutrition', checkNotAuthenticated, (req, res) => {
-    res.render('nutrition', { id: req.user.id, email: req.user.email.toLowerCase(), name: req.user.name })
+    res.render('nutrition', { id: req.user.id, email: req.user.email.toLowerCase(), name: req.user.name, age: req.user.age, height: req.user.height, weight: req.user.weight })
 })
 
 router.get('/users/recipes', checkNotAuthenticated, (req, res) => {
-    res.render('recipes')
+    res.render('recipes',{ id: req.user.id, email: req.user.email.toLowerCase(), name: req.user.name, age: req.user.age, height: req.user.height, weight: req.user.weight })
 })
 
 router.get('/users/fitness', checkNotAuthenticated, (req, res) => {
-    res.render('fitness')
+    res.render('fitness', { id: req.user.id, email: req.user.email.toLowerCase(), name: req.user.name, age: req.user.age, height: req.user.height, weight: req.user.weight })
+})
+
+router.get('/users/profile', checkNotAuthenticated, (req, res) => {
+    res.render('profile', { id: req.user.id, email: req.user.email.toLowerCase(), name: req.user.name, age: req.user.age, height: req.user.height, weight: req.user.weight })
 })
 
 router.get('/users/logout', (req, res) => {
@@ -41,17 +52,22 @@ router.get('/users/logout', (req, res) => {
 });
 
 router.post('/users/register', async (req, res) => {
-    let { name, email, password, password2 } = req.body;
+    let { name, email, password, password2, age, feet, inches, weight } = req.body;
     email = email.toLowerCase();
+    const height = parseInt(feet) * 12 + parseInt(inches);
 
     console.log({
         name,
         email,
         password,
-        password2
+        password2,
+        age,
+        feet,
+        inches,
+        weight,
     });
     let errors = [];
-    if(!name || !email || !password || !password2) {
+    if(!name || !email || !password || !password2 || !age || !feet || !inches || !weight) {
         errors.push({ message: "Please enter all fields" });
     }
     if(password.length < 6) {
@@ -80,9 +96,9 @@ router.post('/users/register', async (req, res) => {
                     res.render('register', { errors });
                 } else {
                     pool.query(
-                        `INSERT INTO users (name, email, password)
-                        VALUES ($1, $2, $3)
-                        RETURNING id, password`, [name, email, hashedPassword], (err, results) => {
+                        `INSERT INTO users (name, email, password, age, height, weight)
+                        VALUES ($1, $2, $3, $4, $5, $6)
+                        RETURNING id, password`, [name, email, hashedPassword, age, height, weight], (err, results) => {
                             if(err) {
                                 throw err;
                             }
