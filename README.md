@@ -49,15 +49,14 @@
   On the nutrition page, users can search for food items and view their nutritional facts. They can then add these items to their food diary which will then be stored in the database. For both the Fitness page and Nutrition page, the inputs for the current day will remain visible for the entire day unless the user chooses to delete an input.On the profile page, users can view their Name, email, BMI and edit their age, height, and weight. All of this information is stored in the database and can be updated at any time.
 
 ## Instructions
-[First you'll need to install Postgresql and create a database](setupREADME.md)
+[First you'll need to download Node.js, install Postgresql and create a database](setupREADME.md)
 
 All necessary instructions can be found using the link above.
 
 For the nutrition facts API you'll need your own API key.
 [You can attain that here](https://rapidapi.com/edamam/api/edamam-nutrition-analysis)
 
-
-Once you've set up your database:
+Once you've install Node.js and set up your database:
   1. clone the repository
   2. run the command: npm install
   3. Create a .env file using the example.env file as a template
