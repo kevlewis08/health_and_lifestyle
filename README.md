@@ -65,7 +65,7 @@ Once you've install Node.js and set up your database:
   6. go to your localhost
   7. sign in/register
 
-Congratulations you've successfully created your fitness account.
+## Congratulations you've successfully created your fitness account.
 
 You now have access to:
 
