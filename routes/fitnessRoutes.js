@@ -57,11 +57,11 @@ router.delete('/api/exercise_log', async (req, res) => {
         console.log(userEmail);
         const exerciseName = req.query.name;
         console.log(exerciseName);
+        const date = req.query.date;
   
-        // Perform deletion in the database
         const deleteQuery = {
-            text: 'DELETE FROM exercise_log WHERE user_email = $1 AND exercise_name = $2',
-            values: [userEmail, exerciseName],
+            text: 'DELETE FROM exercise_log WHERE user_email = $1 AND exercise_name = $2 AND date = $3',
+            values: [userEmail, exerciseName, date],
         };
   
         await pool.query(deleteQuery);

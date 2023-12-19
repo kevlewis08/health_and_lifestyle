@@ -108,11 +108,12 @@ router.delete('/api/food_log', async (req, res) => {
       console.log(userEmail);
       const foodName = req.query.name;
       console.log(foodName);
+      const date = req.query.date;
 
       // Perform deletion in the database
       const deleteQuery = {
-          text: 'DELETE FROM food_log WHERE user_email = $1 AND food_name = $2',
-          values: [userEmail, foodName],
+          text: 'DELETE FROM food_log WHERE user_email = $1 AND food_name = $2 AND date = $3',
+          values: [userEmail, foodName, date],
       };
 
       await pool.query(deleteQuery);
