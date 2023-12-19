@@ -16,10 +16,10 @@ function getCurrentDate() {
 router.get('/api/exercise_log', async (req, res) => {
     try {
         const userEmail = req.user.email;
-        const currentDate = getCurrentDate();
+        const { date = getCurrentDate() } = req.query;
         const query = {
         text: 'SELECT * FROM exercise_log WHERE date = $1 AND user_email = $2',
-        values: [currentDate, userEmail],
+        values: [date, userEmail],
         };
     
         const result = await pool.query(query);

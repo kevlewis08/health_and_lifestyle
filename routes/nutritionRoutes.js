@@ -61,13 +61,15 @@ function getCurrentDate() {
   return `${year}-${month}-${day}`;
 }
 
+
 router.get('/api/food_log', async (req, res) => {
   try {
     const userEmail = req.user.email;
-    const currentDate = getCurrentDate();
+    const { date = getCurrentDate() } = req.query;
+    console.log(date);
     const query = {
       text: 'SELECT * FROM food_log WHERE date = $1 AND user_email = $2',
-      values: [currentDate, userEmail],
+      values: [date, userEmail],
     };
 
     const result = await pool.query(query);

@@ -6,10 +6,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <style>
+            .nav-item {
+                padding-right: 10px;
+                font-size: 20px;
+            }
+        </style>
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="/users/dashboard">Health & Fitness</a>
+            <!-- <a class="navbar-brand" href="/users/dashboard">Health & Fitness</a> -->
+            <a class="navbar-brand" href="/users/dashboard">
+                <div class="logo-image">
+                    <img src="https://ik.imagekit.io/jskeete54/logo_hki_OaDOA3F_N?updatedAt=1702968502355" class="img-fluid" style="width:100px">
+                </div>
+            </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -37,7 +48,15 @@
             </div>
         </nav>
         <div class="container">
+            <br/>
             <h1 style="text-align:center">Fitness Log</h1>
+            <hr/>
+            <div class="row">
+                <div class="col">
+                    <button data-toggle="modal" data-target="#historyModal">View History</button>
+                </div>
+            </div>
+            <br/>
             <table class="table">
                 <thead>
                     <tr>
@@ -49,9 +68,28 @@
                     </tr>
                 </thead>
                 <tbody id="daily-log">
-                    <!-- Daily log entries will be added here dynamically -->
                 </tbody>
             </table>
+        </div>
+        <div class="modal fade" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="historyModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="historyModalLabel">View History</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="historyDate">Select Date:</label>
+                        <input type="date" id="historyDate" class="form-control">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="viewHistory()">View</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <script>
@@ -61,14 +99,23 @@
                 const month = String(today.getMonth() + 1).padStart(2, '0');
                 const day = String(today.getDate()).padStart(2, '0');
                 return `${year}-${month}-${day}`;
-              }
+            }
+
+            async function viewHistory() {
+                const historyDate = document.getElementById('historyDate').value;
+                console.log(historyDate);
+                // Perform an axios request to fetch and display history for the selected date
+                // Update the "daily-log" and "totals-row" accordingly
+
+                getExerciseLogForDate(historyDate);
+                $('#historyModal').modal('hide');
+            };
 
             function addExerciseToDatabase(name, description) {
                 const userEmail = '<%=email%>';
                 const userID = '<%=id%>';
                 const currentDate = getCurrentDate();
             
-                // Send the data to the server using an AJAX request
                 axios.post('/api/exercise_log', {
                     user_id: userID,
                     user_email: userEmail.toLowerCase(),
@@ -84,20 +131,20 @@
                 });
             }
 
-            async function getExerciseLogForDate() {
+            async function getExerciseLogForDate(date=getCurrentDate()) {
                 try {
-                    const response = await axios.get('/api/exercise_log');
+                    const response = await axios.get(`/api/exercise_log?date=${date}`);
                     const exerciseLogData = response.data;
+
+                    clearDailyLog();
                     
                     exerciseLogData.forEach((entry) => {
                         const dailyLog = document.getElementById('daily-log');
                         const existingRow = findExistingRow(entry.exercise_name);
                         if (existingRow) {
-                            // Update the existing row
                             existingRow.cells[0].textContent = entry.exercise_name;
                             existingRow.cells[1].textContent = entry.description;
                         } else {
-                            // Add a new row
                             const newRow = document.createElement('tr');
                             newRow.innerHTML = `
                             <td>${entry.exercise_name}</td>
@@ -112,6 +159,11 @@
                     console.error('Error fetching exercise log for the current date:', error);
                 }
             }
+
+            function clearDailyLog() {
+                const dailyLog = document.getElementById('daily-log');
+                dailyLog.innerHTML = '';
+            }
             
             getExerciseLogForDate();
             
@@ -120,11 +172,9 @@
                 const name = rowToDelete.cells[0].textContent;
                 console.log('Deleting exercise:', name);
                 
-                // Send a request to delete the exercise entry from the database
                 axios.delete(`/api/exercise_log?email=<%=email%>&name=${name}`)
                     .then(response => {
                         console.log('Exercise deleted from the database:', response.data);
-                        // Remove the row from the table if deletion is successful
                         rowToDelete.remove();
                     })
                     .catch(error => {
