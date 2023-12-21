@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Health & Fitness</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <style>
+            .nav-item {
+                padding-right: 10px;
+                font-size: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/users/dashboard">
+                <div class="logo-image">
+                    <img src="https://ik.imagekit.io/jskeete54/logo_hki_OaDOA3F_N?updatedAt=1702968502355" class="img-fluid" style="width:100px">
+                </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/dashboard">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/fitness">Fitness</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/users/nutrition">Nutrition<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/recipes">Recipes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/profile">Profile</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/users/logout">Logout</a>
+                </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="container">
+            <h1 style="text-align:center">Nutrition Facts</h1>
+            <hr/>
+            <div class="row">
+                <div class="col">
+                    <button data-toggle="modal" data-target="#historyModal">View History</button>
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col">
+                    <input type="text" id="search-input" placeholder="Enter a food...">
+                    <input type="number" id="amount" placeholder="100" style="width: 50px; text-align: right">
+                    <span>
+                        <select id="unit">
+                        <option value="g">g</option>
+                        <option value="oz">oz</option>
+                        </select>
+                    </span>
+                    <button id="search-button">Search</button>
+                </div>
+            </div>
+            <br/>
+            <div class="modal fade" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="historyModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="historyModalLabel">View History</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <label for="historyDate">Select Date:</label>
+                            <input type="date" id="historyDate" class="form-control">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" onclick="viewHistory()">View</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div id="search-results"></div>
+                    <h1 style="text-align:center">Daily Log</h1>
+                    <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Food</th>
+                                    <th>Calories</th>
+                                    <th>Fat</th>
+                                    <th>Carbs</th>
+                                    <th>Protein</th>
+                                    <th>
+                                        <button class="btn btn-light" onclick="addCustomRow()">+</button>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="daily-log">
+                            </tbody>
+                            <tfoot>
+                                <tr id="totals-row">
+                                <td>Total</td>
+                                <td id="total-calories">0</td>
+                                <td id="total-fat">0</td>
+                                <td id="total-carbs">0</td>
+                                <td id="total-protein">0</td>
+                                <td></td>
+                                </tr>
+                            </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function getCurrentDate() {
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const day = String(today.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+              }
+
+            let pageDate = getCurrentDate();
+            
+            async function viewHistory() {
+                const historyDate = document.getElementById('historyDate').value;
+                console.log(historyDate);
+                pageDate = historyDate;
+                getFoodLogForDate(historyDate);
+                $('#historyModal').modal('hide');
+            };
+            
+            function addFoodToDatabase(name, calories, carbs, fat, protein) {
+                const userEmail = '<%=email%>';
+                const userID = '<%=id%>';
+                const currentDate = pageDate;
+            
+                axios.post('/api/food_log', {
+                    user_id: userID,
+                    user_email: userEmail.toLowerCase(),
+                    date: currentDate,
+                    food_name: name,
+                    calories: calories,
+                    carbs: carbs,
+                    fat: fat,
+                    protein: protein,
+                })
+                .then(response => {
+                    console.log('Food added to the database:', response.data);
+                })
+                .catch(error => {
+                    console.error('Error adding food to the database:', error);
+                });
+            }
+
+            async function getFoodLogForDate(date=getCurrentDate()) {
+                try {
+
+                    const response = await axios.get(`/api/food_log?date=${date}`);
+                    const foodLogData = response.data;
+
+                    clearDailyLog();
+                    
+                    foodLogData.forEach((entry) => {
+                        const dailyLog = document.getElementById('daily-log');
+                        const existingRow = findExistingRow(entry.food_name);
+                        if (existingRow) {
+                            existingRow.cells[1].textContent = entry.calories;
+                            existingRow.cells[2].textContent = entry.fat;
+                            existingRow.cells[3].textContent = entry.carbs;
+                            existingRow.cells[4].textContent = entry.protein;
+                        } else {
+                            const newRow = document.createElement('tr');
+                            newRow.innerHTML = `
+                            <td>${entry.food_name}</td>
+                            <td>${entry.calories}</td>
+                            <td>${entry.fat}</td>
+                            <td>${entry.carbs}</td>
+                            <td>${entry.protein}</td>
+                            <td><button class="btn btn-light" onclick="deleteFood(this)">&#8722;</button></td>
+                            `;
+                            
+                            dailyLog.insertBefore(newRow, dailyLog.lastElementChild);
+                        }
+                    });
+                    updateTotals();
+                } catch (error) {
+                    console.error('Error fetching food log for the current date:', error);
+                }
+            }
+
+            function clearDailyLog() {
+                const dailyLog = document.getElementById('daily-log');
+                dailyLog.innerHTML = '';
+            }
+            
+            getFoodLogForDate();
+
+            const searchButton = document.getElementById('search-button');
+
+            searchButton.addEventListener('click', async () => {
+                await performSearch();
+            });
+
+            document.getElementById('search-input').addEventListener('keyup', async (event) => {
+                if (event.key === 'Enter') {
+                await performSearch();
+                }
+            });
+
+            document.getElementById('amount').addEventListener('keyup', async (event) => {
+                if (event.key === 'Enter') {
+                await performSearch();
+                }
+            });
+
+            function addFood(name, calories, carbs, fat, protein) {
+                const dailyLog = document.getElementById('daily-log');
+                const existingRow = findExistingRow(name);
+                if (existingRow) {
+                    // Update the existing row
+                    existingRow.cells[1].textContent = calories;
+                    existingRow.cells[2].textContent = fat;
+                    existingRow.cells[3].textContent = carbs;
+                    existingRow.cells[4].textContent = protein;
+                } else {
+                    // Add a new row
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                    <td>${name}</td>
+                    <td>${calories}</td>
+                    <td>${fat}</td>
+                    <td>${carbs}</td>
+                    <td>${protein}</td>
+                    <td><button class="btn btn-light" onclick="deleteFood(this)">&#8722;</button></td>
+                    `;
+                    
+                    dailyLog.insertBefore(newRow, dailyLog.lastElementChild);
+                    addFoodToDatabase(name, calories, carbs, fat, protein);
+                    updateTotals();
+                }
+            }
+            function deleteFood(button) {
+                const rowToDelete = button.closest('tr');
+                const name = rowToDelete.cells[0].textContent;
+                
+                // Send a request to delete the food entry from the database
+                axios.delete(`/api/food_log?email=<%=email%>&name=${name}&date=${pageDate}`)
+                    .then(response => {
+                        console.log('Food deleted from the database:', response.data);
+                        // Remove the row from the table if deletion is successful
+                        rowToDelete.remove();
+                        updateTotals();
+                    })
+                    .catch(error => {
+                        console.error('Error deleting food from the database:', error);
+                    });
+            }
+            
+
+            function findExistingRow(name) {
+                const dailyLog = document.getElementById('daily-log');
+                const rows = dailyLog.getElementsByTagName('tr');
+            
+                for (let i = 0; i < rows.length; i++) {
+                    const foodName = rows[i].cells[0].textContent;
+                    if (foodName === name) {
+                        return rows[i];
+                    }
+                }
+            
+                return null;
+            }
+
+            async function performSearch() {
+                const searchTerm = document.getElementById('search-input').value;
+                const amount = document.getElementById('amount').value || 100;
+                const unit = document.getElementById('unit').value;
+                try {
+                const grams = unit === 'oz' ? amount * 28.3495 : amount;
+                const response = await axios.get(`/api/nutrition?ingr=${searchTerm}&grams=${grams}`);
+                const data = response.data;
+                document.getElementById('search-results').innerHTML = `
+                    <p>Calories: ${data.calories}</p>
+                    <p>Fat: ${data.fat}</p>
+                    <p>Carbs: ${data.carbs}</p>
+                    <p>Protein: ${data.protein}</p>
+                    <button id="add-button" onclick="addFood('${searchTerm}', ${data.calories}, ${data.carbs}, ${data.fat}, ${data.protein})">Add to Log</button>
+                `;
+                } catch (error) {
+                console.error('An error occurred:', error);
+                document.getElementById('search-results').innerHTML = `<p>Sorry, we couldn't find any results for that search.</p>`;
+                }
+            }
+
+            function updateTotals(button=null) {
+                if (button) {
+                    const row = button.closest('tr');
+                    const cells = row.getElementsByTagName('td');
+                    const name = cells[0].textContent;
+                    const calories = parseFloat(cells[1].textContent) || 0;
+                    const fat = parseFloat(cells[2].textContent) || 0;
+                    const carbs = parseFloat(cells[3].textContent) || 0;
+                    const protein = parseFloat(cells[4].textContent) || 0;
+                    addFoodToDatabase(name, calories, carbs, fat, protein);
+                }
+                
+                const dailyLog = document.getElementById('daily-log');
+                const rows = dailyLog.getElementsByTagName('tr');
+            
+                let totalCalories = 0;
+                let totalFat = 0;
+                let totalCarbs = 0;
+                let totalProtein = 0;
+            
+                for (let i = 0; i < rows.length; i++) {
+                    const cells = rows[i].getElementsByTagName('td');
+                    if (cells.length === 6) { // Exclude the totals row
+                        totalCalories += parseFloat(cells[1].textContent) || 0;
+                        totalFat += parseFloat(cells[2].textContent) || 0;
+                        totalCarbs += parseFloat(cells[3].textContent) || 0;
+                        totalProtein += parseFloat(cells[4].textContent) || 0;
+                    }
+                }
+            
+                // Update the totals row without decimals
+                document.getElementById('total-calories').textContent = Math.round(totalCalories);
+                document.getElementById('total-fat').textContent = Math.round(totalFat);
+                document.getElementById('total-carbs').textContent = Math.round(totalCarbs);
+                document.getElementById('total-protein').textContent = Math.round(totalProtein);
+            }
+
+            function addCustomRow() {
+                const dailyLog = document.getElementById('daily-log');
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td contenteditable="true"></td>
+                    <td contenteditable="true">0</td>
+                    <td contenteditable="true">0</td>
+                    <td contenteditable="true">0</td>
+                    <td contenteditable="true">0</td>
+                    <td>
+                        <button class="btn btn-light" onclick="updateTotals(this)">&#10003;</button>
+                        <button class="btn btn-light" onclick="deleteFood(this)">&#8722;</button>
+                    </td>
+                `;
+                dailyLog.insertBefore(newRow, dailyLog.lastElementChild);
+                updateTotals();
+            }
+        </script>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+</html>
