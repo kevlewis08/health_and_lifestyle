@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Health & Lifestyle</title>
+    <link rel="stylesheet" type="text/css" href="style.CSS" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+  </head>
+  <body id="body" class="recipe-body">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+      <div class="container">
+        <a id="logo" href="index.HTML"
+          ><img
+            class="logo"
+            src="images/Logo.png"
+            width="70"
+            height="70"
+            alt="logo"
+        /></a>
+        <button
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+          class="navbar-toggler"
+          data-target="#navbarSupportedContent"
+          data-toggle="collapse"
+          type="button"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent1">
+          <ul class="navbar-nav ml-auto mr-2">
+            <li class="nav-item">
+              <a class="nav-link" href="about.HTML">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="exercise.HTML">Exercise</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="recipe.HTML">Recipes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="nutrition.HTML">Nutrition/Tips</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="plans.HTML">plans</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div id="recipe">
+      <div class="recipe-group" id="keto-recipes">
+        <h2>Keto Recipes</h2>
+        <div
+          class="recipe"
+          onclick="showRecipeDetails('Keto Cauliflower Pizza', 
+          '<ul><h3>Serving Size:</h3><li>1 slice (assuming the pizza is divided into 8 slices)</li><h3>Per Serving:</h3><li>Calories:Approximately 150-200 calories</li><li>Protein:Approximately 8-10 grams</li><li>Fat:Approximately 10-15 grams</li><li>Carbohydrates:Approximately 5-8 grams(net carbs)</li></ul>' , 
+          '<ul><li>Cauliflower, Mozzarella cheese, Almond flour, Eggs, Pizza sauce, Toppings of choice</li></ul>','<ul><li>Rice cauliflower and cook until tender. Mix cauliflower with Mozzarella, alomond flour, and eggs to forma dough. Press dough onto a pizza pan and bake until golden. Spread sugar-free pizza sauce and add desired toppings. Bake until cheese is melted and bubbly</li></ul>')"
+        >
+          <p>Keto Cauliflower Pizza</p>
+        </div>
+        <div
+          class="recipe"
+          onclick="showRecipeDetails('Avocado and Bacon Egg Cups', 'Nutritional facts here')"
+        >
+          <p>Avocado and Bacon Egg Cups</p>
+        </div>
+      </div>
+
+      <div class="recipe-group" id="vegan-recipes">
+        <h2>Vegan Recipes</h2>
+        <div
+          class="recipe"
+          onclick="showRecipeDetails('Vegan Buddha Bowl', 'Nutritional facts here')"
+        >
+          <p>Vegan Buddha Bowl</p>
+        </div>
+        <div
+          class="recipe"
+          onclick="showRecipeDetails('Vegan Lentil Curry', 'Nutritional facts here')"
+        >
+          <p>Vegan Lentil Curry</p>
+        </div>
+      </div>
+
+      <div class="recipe-group" id="Low-carb-recipes">
+        <h2>Low-carb Recipes</h2>
+        <div
+          class="recipe"
+          onclick="showRecipeDetails('Grilled Chicken Caesar Salad', 'Nutritional facts here')"
+        >
+          <p>Grilled Chicken Caesar Salad</p>
+        </div>
+        <div
+          class="recipe"
+          onclick="showRecipeDetails('Zucchini Noodles with Pesto', 'Nutritional facts here')"
+        >
+          <p>Zucchini Noodles with Pesto</p>
+        </div>
+      </div>
+
+      <div class="recipe-group" id="Pescatarian recipes">
+        <h2>Pescatarian Recipes</h2>
+        <div
+          class="recipe"
+          onclick="showRecipeDetails('Lemon Garlic Butter Shrimp', 'Nutritional facts here')"
+        >
+          <p>Lemon Garlic Butter Shrimp</p>
+        </div>
+        <div
+          class="recipe"
+          onclick="showRecipeDetails('Grilled Salmon with Dill Sauce', 'Nutritional facts here')"
+        >
+          <p>Grilled Salmon with Dill Sauce</p>
+        </div>
+      </div>
+
+      <div class="recipe-group" id="Gluten-free recipes">
+        <h2>Gluten-free Recipes</h2>
+        <div
+          class="recipe"
+          onclick="showRecipeDetails('Quinoa Salad with Roasted Vegetables', 'Nutritional facts here')"
+        >
+          <p>Quinoa Salad with Roasted Vegetables</p>
+        </div>
+        <div
+          class="recipe"
+          onclick="showRecipeDetails('Grilled Chicken and Vegetable Skewers', 'Nutritional facts here')"
+        >
+          <p>Grilled Chicken and Vegetable Skewers</p>
+        </div>
+      </div>
+
+      <div id="recipe-details-modal" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal()">&times;</span>
+          <h2 id="recipe-title"></h2>
+          <p id="recipe-nutrition"></p>
+          <p id="recipe-ingredients"></p>
+          <p id="recipe-instructions"></p>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-content">
+        <p>&copy; 2023 Health & Fitness Hub</p>
+        <p>Contact: students@health&fitness.com</p>
+      </div>
+    </footer>
+
+    <script src="myscript.JS"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+  </body>
+</html>
