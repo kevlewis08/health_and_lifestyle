@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Health & Fitness</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        .nav-item {
+            padding-right: 10px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/users/dashboard">
+            <div class="logo-image">
+                <img src="https://ik.imagekit.io/jskeete54/logo_hki_OaDOA3F_N?updatedAt=1702968502355" class="img-fluid" style="width:100px">
+            </div>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/dashboard">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/fitness">Fitness</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/nutrition">Nutrition</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/recipes">Recipes</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/users/profile">Profile<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Profile</h1>
+        <div class="mb-3">
+            <strong>Name:</strong> <%= name %>
+        </div>
+        <div class="mb-3">
+            <strong>Email:</strong> <%= email %> 
+        </div> 
+        <div class="mb-3">
+            <strong>Age:</strong>
+            <span id="ageContainer">
+                <%= age %>
+                <button class="btn btn-light ml-2" onclick="editAge()">Edit</button>
+            </span>
+            <div id="ageEdit" style="display: none;">
+                <input type="number" id="ageInput" class="form-control" placeholder="Enter age">
+                <button class="btn btn-light mt-2" onclick="updateAge()">Save</button>
+            </div>
+        </div>
+        <div class="mb-3">
+            <strong>Height:</strong>
+            <span id="heightContainer">
+                <%= Math.floor(height / 12) %> ft <%= height % 12 %> in
+                <button class="btn btn-light ml-2" onclick="editHeight()">Edit</button>
+            </span>
+            <div id="heightEdit" style="display: none;">
+                <input type="number" id="heightInput" class="form-control" placeholder="Enter height in inches">
+                <button class="btn btn-light mt-2" onclick="updateHeight()">Save</button>
+            </div>
+        </div>  
+        <div class="mb-3">
+            <strong>Weight:</strong> 
+            <span id="weightContainer">
+                <%= weight %> lbs
+                <button class="btn btn-light ml-2" onclick="editWeight()">Edit</button>
+            </span>
+            <div id="weightEdit" style="display: none;">
+                <input type="number" id="weightInput" class="form-control" placeholder="Enter weight in lbs">
+                <button class="btn btn-light mt-2" onclick="updateWeight()">Save</button>
+            </div>
+        </div>
+        <div>
+            <strong>BMI:</strong> <%= Math.round((weight / (height * height)) * 703) %>
+        </div>
+    </div>
+
+        <script>
+            function getCurrentDate() {
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const day = String(today.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+              }
+
+            function toggleEditDisplay(containerId, editId) {
+                const container = document.getElementById(containerId);
+                const edit = document.getElementById(editId);
+
+                container.style.display = container.style.display === 'none' ? 'inline' : 'none';
+                edit.style.display = edit.style.display === 'none' ? 'inline' : 'none';
+            }
+
+            function editAge() {
+                toggleEditDisplay('ageContainer', 'ageEdit');
+            }
+
+            function editHeight() {
+                toggleEditDisplay('heightContainer', 'heightEdit');
+            }
+
+            function editWeight() {
+                toggleEditDisplay('weightContainer', 'weightEdit');
+            }
+
+            function updateAge() {
+                const newAge = document.getElementById('ageInput').value;
+                if (newAge < 1 || newAge === '' || newAge > 120) {
+                    toggleEditDisplay('ageContainer', 'ageEdit');
+                    return;
+                }
+                // Perform logic to update age on the server using axios
+                axios.put('/api/users?email=<%=email%>&name=${name}', {
+                    name: '<%=name%>',
+                    email: '<%=email%>',
+                    age: newAge,
+                    height: '<%=height%>',
+                    weight: '<%=weight%>',
+                })
+                .then(response => {
+                    console.log('Updated user:', response.data);
+                    toggleEditDisplay('ageContainer', 'ageEdit');
+                    // Refresh the page
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('Error updating user:', error);
+                });
+                toggleEditDisplay('ageContainer', 'ageEdit');
+            }
+
+            function updateHeight() {
+                const newHeight = document.getElementById('heightInput').value;
+                if (newHeight < 36 || newHeight === '' || newHeight > 96) {
+                    toggleEditDisplay('heightContainer', 'heightEdit');
+                    return;
+                }
+                // Perform logic to update height on the server using axios
+                axios.put('/api/users?email=<%=email%>&name=${name}', {
+                    name: '<%=name%>',
+                    email: '<%=email%>',
+                    age: '<%=age%>',
+                    height: newHeight,
+                    weight: '<%=weight%>',
+                })
+                .then(response => {
+                    console.log('Updated user:', response.data);
+                    toggleEditDisplay('heightContainer', 'heightEdit');
+                    // Refresh the page
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('Error updating user:', error);
+                });
+                toggleEditDisplay('heightContainer', 'heightEdit');
+            }
+
+            function updateWeight() {
+                const newWeight = document.getElementById('weightInput').value;
+                if (newWeight < 1 || newWeight === '' || newWeight > 1000) {
+                    toggleEditDisplay('weightContainer', 'weightEdit');
+                    return;
+                }
+                // Perform logic to update weight on the server using axios
+                axios.put('/api/users?email=<%=email%>&name=${name}', {
+                    name: '<%=name%>',
+                    email: '<%=email%>',
+                    age: '<%=age%>',
+                    height: '<%=height%>',
+                    weight: newWeight,
+                })
+                .then(response => {
+                    console.log('Updated user:', response.data);
+                    toggleEditDisplay('weightContainer', 'weightEdit');
+                    // Refresh the page
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('Error updating user:', error);
+                });
+                toggleEditDisplay('weightContainer', 'weightEdit');
+            }
+            
+        </script>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+</html>

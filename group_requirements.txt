@@ -13,8 +13,14 @@ Create Food Diary
     
 Create Landing Page
     Nav Bar
+        1. Find a navbar style that I like
+        2. Add the logo to the left of navbar.
+        3. Link other pages and social addresses.
     Filler Content
+        1. Add relevant fitness images.
+        2. "About" information.
     Carousel with linked articles
+        1. Create a carousel that fits center of page and contains 4 relevant fitness articles
     
 Create Exercise Journal
     Excercise Tracker
@@ -33,18 +39,23 @@ Create Profile Page
     
 Create Page for Recipes
     Recipe API?
+        1. Find and implement an api that shows the nutritional value of recipes that will be provided.
     Recipe Search
+        2. Research on the web and books for recipes and implement them in "card columns".
     Links to Recipes
+        3. Make sure to link the recipes to avoid plagiarism.
     
 Create Tips and Articles page
     Links to articles
     Links to youtube videos
     Links to tips 
     Links to best work out clothing
+        1. Research all tips and articles make sure to display in a column.
     
 Create A Logo
     Choose color and font of webapp
     Create relevant logo
+        1. Use Canva to create a logo that fits the width and length that I need it to fit in the Navbar. 
     
 Create Community sharing page / forum
     Allow Verified users to create threads
