@@ -33,7 +33,21 @@
 
 ## Fulfilled Requirements
   #### Alyssa Roach
-    type here
+    ✔️Creating landing page
+    ✔️Recipe Page
+    ✔️ Tips and articles Page
+    ✔️ Creating logo
+
+    I created the landing page by creating the Navbar to host all the linked pages and the logo I put on the left side of the navbar. I then linked all the pages to eachother. Also on the landing page I implemented a carousel that hosts about 3 links to articles. The carousel showcase images that when you click them they take you to the link of the article. I implemented an about section, I include profile cards for each team member, in the profile cards I also included github and linkden links as well as images. 
+    At the bottom of each page I included a footer. For the recipe page, I hosted different recipes and put them in subgroups, when you click the recipe, it creates a pop up that shows the recipe instructions and nutritional facts. For the tips and articles page, I implemented articles of tips foods, clothing, exercies ETC into cards. The cards host an image, with the URL and the date and time they were created with the author as well.
+
+  ## Instructions
+1. You can navigate the landing page by clicking the navbar links to go to the other pages. To get to the home page you can always click the logo.
+2. On the carousel there are arrows on opposie ends to use
+3. On the about page you can click the links to navigate the the different linkdlen and github profiles.
+4. On the recipe page you click the name of the recipe and it takes you to the page with the recipe's instructions, ingredients list and nuritional facts.
+5. On this articles page there you can click the card itse4lf to be transported to the article itself.
+  
 
   #### Alex Reyes
     type here
